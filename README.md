@@ -26,3 +26,9 @@ Set of crawlers for jobhelper.
    - Crawler for violation records in MS word form.
      *Try use online tool supporting doc to txt then see what can do.
    - Web page shapshot.
+     *Might make use of http://www.hiqpdf.com/demo/ConvertHtmlToImage.aspx
+
+6. jobhelper(chrome) : http://jobhelper.g0v.ronny.tw/
+                       https://github.com/ronnywang/jobhelper
+   jobhelper(firefox) : https://addons.mozilla.org/zh-TW/firefox/addon/job-helper/versions/?page=1#version-1.4.0
+   forum : https://groups.google.com/forum/?fromgroups#!forum/twjobhelper
