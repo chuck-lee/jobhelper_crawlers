@@ -30,5 +30,6 @@ Set of crawlers for jobhelper.
 
 6. jobhelper(chrome) : http://jobhelper.g0v.ronny.tw/
                        https://github.com/ronnywang/jobhelper
-   jobhelper(firefox) : https://addons.mozilla.org/zh-TW/firefox/addon/job-helper/versions/?page=1#version-1.4.0
+   jobhelper(firefox) : https://addons.mozilla.org/zh-TW/firefox/addon/job-helper/
+                        https://github.com/yisheng-liu/jobhelper_ff
    forum : https://groups.google.com/forum/?fromgroups#!forum/twjobhelper
