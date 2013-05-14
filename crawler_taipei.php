@@ -50,7 +50,7 @@ class crawlerTaipei extends crawlerBase
         $this->debug("getViolationRecords() Start");
 
         // Get web content
-        $content = $this->http($this->targetUrl, $this->refererUrl, array());
+        $content = $this->http($this->targetUrl, $this->refererUrl, false, array());
         $htmlDoc = new DOMDocument;
         @$htmlDoc->loadHTML($content);
 
