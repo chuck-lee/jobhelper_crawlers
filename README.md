@@ -27,8 +27,9 @@ Set of crawlers for jobhelper.
    - Crawler for violation records in MS word form.
      *Try use online tool supporting doc to txt then see what can do.
 
-6. jobhelper(chrome) : http://jobhelper.g0v.ronny.tw/
-                       https://github.com/ronnywang/jobhelper
-   jobhelper(firefox) : https://addons.mozilla.org/zh-TW/firefox/addon/job-helper/
-                        https://github.com/yisheng-liu/jobhelper_ff
-   forum : https://groups.google.com/forum/?fromgroups#!forum/twjobhelper
+6. jobhelper
+   - forum : https://groups.google.com/forum/?fromgroups#!forum/twjobhelper
+   - chrome plugin : http://jobhelper.g0v.ronny.tw/
+   - chrome source code : https://github.com/ronnywang/jobhelper
+   - firefox plugin : https://addons.mozilla.org/zh-TW/firefox/addon/job-helper/
+   - firefox source code : https://github.com/yisheng-liu/jobhelper_ff
