@@ -124,6 +124,18 @@ class crawlerBase
         $this->dateString = date("Y_m_d_H_i_s");
     }
 
+    protected function writeToFile($data, $filename)
+    {
+        $output = fopen($filename, "w+");
+        if ($output)
+        {
+            fwrite($output, $data);
+            fclose($output);
+            return true;
+        }
+        return false;
+    }
+
     /**
      *  Use MD5 to determine if $content has been updated. the MD5 record is
      *  stored in WORK_SPACE_PATH/$this->moduleName/$this->moduleName.content.md5
@@ -150,14 +162,7 @@ class crawlerBase
         }
 
         // Update MD5 record
-        $tagFile = fopen($tagFilename, "w+");
-        if ($tagFile)
-        {
-            fwrite($tagFile, $contentMd5 . "\n");
-            fwrite($tagFile, $this->dateString);
-
-            fclose($tagFile);
-        }
+        $this->writeToFile($contentMd5 . "\n" . $this->dateString, $tagFilename);
         return true;
     }
 
@@ -168,13 +173,8 @@ class crawlerBase
     protected function saveBackup($content, $prefix, $postfix)
     {
         $backupFilename = $this->backupPath . DIR_SEPERATOR . $prefix . $this->dateString . $postfix;
-        $backupFile = fopen($backupFilename, "w+");
-        if ($backupFile)
-        {
-            fwrite($backupFile, $content);
-            fclose($backupFile);
-        }
 
+        $this->writeToFile($content, $backupFilename);
         return true;
     }
 
@@ -182,11 +182,34 @@ class crawlerBase
      *  Capture snapshot of web page and save to SNAPSHOT_PATH/$this->moduleName/
      *  The filename will be $prefix + date
      *
-     *  I don't know who to do it yet.
+     *  Use http://www.hiqpdf.com/demo/ConvertHtmlToImage.aspx now
      */
     protected function getSnapShot($url, $prefix)
     {
-        // TODO: Get Snapshot
+        $this->dump("getSnapShot() for " . $url);
+
+        $snapShotProvider = "http://www.hiqpdf.com/demo/ConvertHtmlToImage.aspx";
+        $img = $this->http($snapShotProvider, $snapShotProvider, [
+                                '__LASTFOCUS' => '',
+                                'ctl00_treeView_ExpandState' => 'nennnnnnnnnnnnnnnennnnnnnnnnn',
+                                'ctl00_treeView_SelectedNode' => 'ctl00_treeViewt15',
+                                '__EVENTTARGET' => '',
+                                '__EVENTARGUMENT' => '',
+                                'ctl00_treeView_PopulateLog' => '',
+                                '__VIEWSTATE' => '/wEPDwUIMTI3MTYxNzcPZBYCZg9kFgICAw9kFgQCAQ88KwAJAgAPFgYeDU5ldmVyRXhwYW5kZWRkHgxTZWxlY3RlZE5vZGUFEWN0bDAwX3RyZWVWaWV3dDE1HglMYXN0SW5kZXgCHWQIFCsAD2QUKwACFgIeCEV4cGFuZGVkZ2QUKwACFgIfA2cUKwAOZBQrAAIWAh8DZ2QUKwACFgIfA2dkFCsAAhYCHwNnZBQrAAIWAh8DZ2QUKwACFgIfA2dkFCsAAhYCHwNnZBQrAAIWAh8DZ2QUKwACFgIfA2dkFCsAAhYCHwNnZBQrAAIWAh8DZ2QUKwACFgIfA2dkFCsAAhYCHwNnZBQrAAIWAh8DZ2QUKwACFgQeCFNlbGVjdGVkZx8DZ2QUKwACFgIfA2dkFCsAAhYCHwNnFCsAA2QUKwACFgIfA2dkFCsAAhYCHwNnZBQrAAIWAh8DZ2QUKwACFgIfA2dkFCsAAhYCHwNnZBQrAAIWAh8DZ2QUKwACFgIfA2dkFCsAAhYCHwNnZBQrAAIWAh8DZ2QUKwACFgIfA2dkFCsAAhYCHwNnZGQCAw9kFgICAw9kFgJmD2QWAgIJDxBkZBYBZmQYAwUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgUFDmN0bDAwJHRyZWVWaWV3BS9jdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJHJhZGlvQnV0dG9uQ29udmVydFVybAU0Y3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRyYWRpb0J1dHRvbkNvbnZlcnRIdG1sQ29kZQU0Y3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRyYWRpb0J1dHRvbkNvbnZlcnRIdG1sQ29kZQUyY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRjaGVja0JveFRyYW5zcGFyZW50SW1hZ2UFImN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZGVtb1RhYnMPD2RmZAUiY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRkZW1vTWVudQ8PZAUBMGQ=',
+                                '__EVENTVALIDATION' => '/wEdABA8QMyC+Lgt4pggz3m0vRAZuCtPWWr3lQqwkNVrFep13DRsOdRYtyNK/pfSRf4IpDHSJu3SChououi6IfjmzQp0fJiEIDKFbqI+ekloWfNvJ1hTIFooOkHCOLjng6mhybbHgXFJfyGXjsy72bjvoGjjXej5qz5mz748+AchEy1ssxn9iG37gf6XR6aXCVWFtwlTHu84NKYILlryojtfonLvXTQNg6I6Uj8X4CWpA9Wyr16/IKhT9upp0uC97vmG85omisyJzVuJ+vbMdZoMKTFwVD07DJFIM9AyfoJR123X1Z1/uWcTrwAVrtEjfMqvye1TEcgCqPnKz2A8x4DImfNC',
+                                'ctl00$ContentPlaceHolder1$UrlOrHtmlCode' => 'radioButtonConvertUrl',
+                                'ctl00$ContentPlaceHolder1$textBoxUrl' => $url,
+                                'ctl00$ContentPlaceHolder1$dropDownListImageFormat' => 'PNG',
+                                'ctl00$ContentPlaceHolder1$checkBoxTransparentImage' => 'on',
+                                'ctl00$ContentPlaceHolder1$textBoxBrowserWidth' => 1200,
+                                'ctl00$ContentPlaceHolder1$textBoxLoadHtmlTimeout' => 120,
+                                'ctl00$ContentPlaceHolder1$buttonConvertToImage' => 'Convert to Image'
+                           ]);
+
+
+        $this->writeToFile($img, $this->snapshotPath . DIR_SEPERATOR . $prefix .
+                                 $this->dateString . ".png");
         return;
     }
 
