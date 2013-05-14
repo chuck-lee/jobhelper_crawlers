@@ -18,6 +18,7 @@ Set of crawlers for jobhelper.
    - Check if data has been updated before parsing.
    - Export crawled data in CSV form.
    - Backup crawled pages.
+   - Take snapshot of web page via a handy site I found, http://www.hiqpdf.com/demo/ConvertHtmlToImage.aspx
 
 5. TODO list
    - Crawler for violation records in html form.
@@ -25,8 +26,6 @@ Set of crawlers for jobhelper.
      *Try use tool to perform pdf to txt then see what can do.
    - Crawler for violation records in MS word form.
      *Try use online tool supporting doc to txt then see what can do.
-   - Web page shapshot.
-     *Might make use of http://www.hiqpdf.com/demo/ConvertHtmlToImage.aspx
 
 6. jobhelper(chrome) : http://jobhelper.g0v.ronny.tw/
                        https://github.com/ronnywang/jobhelper
