@@ -90,7 +90,7 @@ class crawlerBase
      */
     public function run($dateString)
     {
-        $this->dump("Start crawling for violation record of " . $this->targetName);
+        $this->dump("Start crawling for violation records.");
 
         $this->init($dateString);
 
@@ -123,7 +123,7 @@ class crawlerBase
     protected function init($dateString)
     {
         // Initial required directories
-        $this->debug("init()\n");
+        $this->debug("init()");
 
         $this->dateString = $dateString;
 
@@ -173,7 +173,7 @@ class crawlerBase
      */
     protected function checkUpdated($content)
     {
-        $this->debug("checkUpdated()\n");
+        $this->debug("checkUpdated()");
 
         $tagFilename = $this->updateRecordPath . DIR_SEPERATOR .
                        $this->targetId . "_" . $this->targetName . ".content.md5";
@@ -247,7 +247,7 @@ class crawlerBase
      */
     protected function http($target, $referer, $post_params)
     {
-        $this->debug("http()\n");
+        $this->debug("http()");
 
         if (is_null($this->_curl)) {
             $this->_curl = curl_init();
