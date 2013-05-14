@@ -51,8 +51,12 @@ class crawlerTaipei extends crawlerBase
             return false;
         }
 
+        $this->dump("Save backp");
         $this->saveBackup($content, "", ".html");
+        $this->dump("Get snapshot");
+        $this->getSnapShot($this->targetUrl, "");
 
+        $this->dump("Crawl!");
         // Parse violation record
         $domTrs = $violationTable->getElementsByTagName('tr');
         for ($trIndex = 1; $trIndex < $domTrs->length; $trIndex++) {
