@@ -216,7 +216,7 @@ class crawlerBase
         $this->debug("getSnapShot() for " . $url);
 
         $snapShotProvider = "http://www.hiqpdf.com/demo/ConvertHtmlToImage.aspx";
-        $img = $this->http($snapShotProvider, $snapShotProvider, [
+        $img = $this->http($snapShotProvider, $snapShotProvider, true, [
                                 '__LASTFOCUS' => '',
                                 'ctl00_treeView_ExpandState' => 'nennnnnnnnnnnnnnnennnnnnnnnnn',
                                 'ctl00_treeView_SelectedNode' => 'ctl00_treeViewt15',
@@ -245,7 +245,7 @@ class crawlerBase
      *
      *  Borrowed from https://github.com/ronnywang/fidb-crawler/blob/master/crawler.php
      */
-    protected function http($target, $referer, $post_params)
+    protected function http($target, $referer, $usePost, $post_params)
     {
         $this->debug("http()");
 
@@ -254,19 +254,25 @@ class crawlerBase
         }
 
         $curl = $this->_curl;
-        $terms = array();
 
-        foreach ($post_params as $k => $v) {
-            $terms[] = urlencode($k) . '=' . urlencode($v);
+        if ($usePost) {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+
+            $terms = array();
+            foreach ($post_params as $k => $v) {
+                $terms[] = urlencode($k) . '=' . urlencode($v);
+            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, implode('&', $terms));
+        } else {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
         }
-
-        curl_setopt($curl, CURLOPT_POSTFIELDS, implode('&', $terms));
         curl_setopt($curl, CURLOPT_COOKIEFILE, 'cookie-file');
         curl_setopt($curl, CURLOPT_URL, $target);
         curl_setopt($curl, CURLOPT_REFERER, $referer);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $content = curl_exec($curl);
+
         return $content;
     }
 
@@ -345,6 +351,14 @@ class crawlerBase
         fclose($csvFile);
 
         return true;
+    }
+
+    protected function getUrlPath($url)
+    {
+        $urlInfo = parse_url($url);
+        $cleanUrl = $urlInfo['scheme'] . "://" . $urlInfo['host'] . $urlInfo['path'];
+        // cleanUrl contains filename
+        return  substr($cleanUrl, 0, strrpos($cleanUrl, "/") + 1);
     }
 }
 
