@@ -6,7 +6,7 @@ class crawlerTaipei extends crawlerBase
 {
     public $targetUrl = "http://www.bola.taipei.gov.tw/ct.asp?xItem=41223990&ctNode=62846&mp=116003";
     public $refererUrl = "http://www.bola.taipei.gov.tw/ct.asp?xItem=41223990&ctNode=62846&mp=116003";
-    public $targetId = "00";
+    public $targetId = "01";
     public $targetName = "台北市";
     private $_debug = false;
 
