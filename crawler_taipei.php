@@ -6,7 +6,8 @@ class crawlerTaipei extends crawlerBase
 {
     public $targetUrl = "http://www.bola.taipei.gov.tw/ct.asp?xItem=41223990&ctNode=62846&mp=116003";
     public $refererUrl = "http://www.bola.taipei.gov.tw/ct.asp?xItem=41223990&ctNode=62846&mp=116003";
-    public $moduleName = "TaipeiCity";
+    public $targetId = "00";
+    public $targetName = "台北市";
     private $_debug = false;
 
     /**
@@ -21,16 +22,27 @@ class crawlerTaipei extends crawlerBase
         $this->debug("processViolation(), rules->length: " . $rules->length .
               "behaviors->length: " . $behaviors->length);
 
-        $violations = "";
+        $violationDoc = trim($docTd->nodeValue);
+        $violationLaw = "勞動基準法";
+        $violationDscr = "";
+        $violationSummary = "";
         for ($i = 0; $i < $behaviors->length; $i++ )
         {
-            $violations = $violations .
-                         trim($behaviors->item($i)->nodeValue, "。 ") .
-                         "(勞基法" . trim($rules->item($i)->nodeValue, "●。 ") . ")";
+            $law = trim($rules->item($i)->nodeValue, "●。 ");
+            $dscr = trim($behaviors->item($i)->nodeValue, "●。 ");
+
+            $violationLaw = $violationLaw . $law .
+                            ($i == ($behaviors->length - 1) ? "" : "、");
+            $violationDscr = $violationDscr . $dscr .
+                             ($i == ($behaviors->length - 1) ? "" : "、");
+            $violationSummary = $violationSummary . $dscr .
+                                "(勞基法" . $law . ")" .
+                                ($i == ($behaviors->length - 1) ? "" : "、");
         }
 
-        $violations = $violations . "(" . trim($docTd->nodeValue) . ")";
-        return $violations;
+        $violationSummary = $violationSummary . "(" . $violationDoc . ")";
+        return array($violationLaw, $violationDscr,
+                     $violationDoc, $violationSummary);
     }
 
     protected function getViolationRecords()
@@ -51,9 +63,9 @@ class crawlerTaipei extends crawlerBase
             return false;
         }
 
-        $this->dump("Save backp");
+        $this->dump("Saving backup");
         $this->saveBackup($content, "", ".html");
-        $this->dump("Get snapshot");
+        $this->dump("Getting snapshot");
         $this->getSnapShot($this->targetUrl, "");
 
         $this->dump("Crawl!");
@@ -91,8 +103,11 @@ class crawlerTaipei extends crawlerBase
 
             $violation = new violationRecord;
             $violation->companyName = trim($domTds->item(1)->nodeValue);
-            $violation->violationDate = $this->twDateTransform($domTds->item(5)->nodeValue);
-            $violation->violations = $this->processViolation($domTds->item(2), $domTds->item(3), $domTds->item(4));
+            $violation->violationDateTw = trim($domTds->item(5)->nodeValue);
+            $violation->violationDateCe = $this->twDateTransform($violation->violationDateTw);
+            list ($violation->violationLaw, $violation->violationDscr,
+                  $violation->violationDoc, $violation->violationSummary)
+                  = $this->processViolation($domTds->item(2), $domTds->item(3), $domTds->item(4));
             $violation->dataSource = $this->targetUrl;
             $violation->dataImage = "";
 
