@@ -5,6 +5,7 @@ Set of crawlers for jobhelper.
 
 1. Supported pages
    - Taipei : http://www.bola.taipei.gov.tw/ct.asp?xItem=41223990&ctNode=62846&mp=116003
+   - Keelung : http://www.klcg.gov.tw/social/home.jsp?contlink=ap/news_view.jsp&dataserno=201111220003
 
 2. Required package
    - php5
