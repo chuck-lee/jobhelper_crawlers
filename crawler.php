@@ -2,6 +2,7 @@
 
 include_once 'crawler_keelung.php';
 include_once 'crawler_taipei.php';
+include_once 'crawler_newtaipei.php';
 
 $crawlers = array();
 $updateIndexList = array();
@@ -12,6 +13,7 @@ $runDate = date("Y_m_d_H_i_s");
  */
 $crawlers[] = new crawlerKeelung;
 $crawlers[] = new crawlerTaipei;
+$crawlers[] = new crawlerNewTaipei;
 
 // Run scarwlers
 echo "************************\n";
