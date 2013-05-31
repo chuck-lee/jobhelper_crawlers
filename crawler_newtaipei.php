@@ -49,9 +49,7 @@ class crawlerNewTaipei extends crawlerBase
 
           $attachmentUrl = $docLink->getAttribute('href');
           $attachmentName = explode(".", basename($attachmentUrl));
-
-          $attachment = $this->http($attachmentUrl, $this->refererUrl, false, array());
-          $this->saveBackup($attachment, $attachmentName[0], "." . $attachmentName[1]);
+          $this->downloadUrl($attachmentUrl, $attachmentName[0], ".".$attachmentName[1]);
         }
         return true;
     }

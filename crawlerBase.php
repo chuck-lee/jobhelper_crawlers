@@ -194,6 +194,19 @@ class crawlerBase
     }
 
     /**
+     *  Save URL to BACKUP_PATH/$this->targetName/
+     *  The filename will be $prefix + date + $postfix
+     */
+    protected function downloadUrl($url, $prefix, $postfix)
+    {
+        $content = $this->http($url, $url, false, array());
+        $backupFilename = $this->backupPath . DIR_SEPERATOR . $prefix . $this->dateString . $postfix;
+
+        $this->writeToFile($content, $backupFilename);
+        return true;
+    }
+
+    /**
      *  Save content to BACKUP_PATH/$this->targetName/
      *  The filename will be $prefix + date + $postfix
      */

@@ -45,8 +45,7 @@ class crawlerKeelung extends crawlerBase
         $docLink = $links->item(1);
 
         $attachmentUrl = $this->getUrlPath($this->targetUrl) . $docLink->getAttribute('href');
-        $attachment = $this->http($attachmentUrl, $this->refererUrl, false, array());
-        $this->saveBackup($attachment, "基隆市違反勞動基準法事業單位事業主公布_", ".pdf");
+        $this->downloadUrl($attachmentUrl, "基隆市違反勞動基準法事業單位事業主公布_", ".pdf");
 
         return true;
     }
