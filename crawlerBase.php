@@ -90,6 +90,7 @@ class crawlerBase
      */
     public function run($dateString)
     {
+        $this->dump("");
         $this->dump("Start crawling for violation records.");
 
         $this->init($dateString);
@@ -184,7 +185,7 @@ class crawlerBase
         // MD5 not exist is treated as $content changed.
         if ($lastContentMd5[0] && trim($lastContentMd5[0], "\r\n") == $contentMd5)
         {
-            $this->dump("Content not changed since last crawling.\n");
+            $this->dump("Content not changed since last crawling.");
             return false;
         }
 
