@@ -23,7 +23,7 @@ class crawlerTaipei extends crawlerBase
               "behaviors->length: " . $behaviors->length);
 
         $violationDoc = trim($docTd->nodeValue);
-        $violationLaw = "勞動基準法";
+        $violationLaw = "";
         $violationDscr = "";
         $violationSummary = "";
         for ($i = 0; $i < $behaviors->length; $i++ )
@@ -33,10 +33,13 @@ class crawlerTaipei extends crawlerBase
 
             $violationLaw = $violationLaw . $law .
                             ($i == ($behaviors->length - 1) ? "" : "、");
+            if ($behaviors->length > 1) {
+                $violationDscr = $violationDscr . ($i + 1) . ".";
+            }
             $violationDscr = $violationDscr . $dscr .
-                             ($i == ($behaviors->length - 1) ? "" : "、");
+                             ($i == ($behaviors->length - 1) ? "" : " ");
             $violationSummary = $violationSummary . $dscr .
-                                "(勞基法" . $law . ")" .
+                                "(" . $law . ")" .
                                 ($i == ($behaviors->length - 1) ? "" : "、");
         }
 
